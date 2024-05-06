@@ -2,47 +2,41 @@ package org.example.model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class Reservation implements Serializable {
 
     private Integer roomNumber;
-    private Date checkin;
-    private Date checkout;
+    private Date checkIn;
+    private Date checkOut;
 
     public Reservation () {}
 
     public Reservation(Integer roomNumber, Date checkin, Date checkout) {
         this.roomNumber = roomNumber;
-        this.checkin = checkin;
-        this.checkout = checkout;
+        this.checkIn = checkin;
+        this.checkOut = checkout;
     }
 
     public Integer getRoomNumber() {
         return roomNumber;
     }
-
     public void setRoomNumber(Integer roomNumber) {
         this.roomNumber = roomNumber;
     }
-
-    public Date getCheckin() {
-        return checkin;
+    public Date getCheckIn() {
+        return checkIn;
+    }
+    public Date getCheckOut() {
+        return checkOut;
     }
 
-    public void setCheckin(Date checkin) {
-        this.checkin = checkin;
-    }
 
-    public Date getCheckout() {
-        return checkout;
-    }
-
-    public void setCheckout(Date checkout) {
-        this.checkout = checkout;
-    }
-
-    public double duration(){
-        return 0;
+    public long duration(){
+        // pega a diferença nas datas em milisegundos
+        long diff = checkOut.getTime() - checkIn.getTime();
+        // converter o milisegundos em dias
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
     public void updateDates(Date checkin, Date checkout){
@@ -51,6 +45,6 @@ public class Reservation implements Serializable {
 
     @Override
     public String toString() {
-        return "Reserva: Quarto " + roomNumber + ", check-in: " + checkin + ", check-out: " + checkout + duration();
+        return "Reserva: Quarto " + roomNumber + ", check-in: " + checkIn + ", check-out: " + checkOut + duration();
     }
 }
