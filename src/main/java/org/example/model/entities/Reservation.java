@@ -52,6 +52,6 @@ public class Reservation implements Serializable {
 
     @Override
     public String toString() {
-        return "Reserva: Quarto " + roomNumber + ", check-in: " + simpleDateFormat.format(checkIn) + ", check-out: " + simpleDateFormat.format(checkOut) + duration() + " noites";
+        return "Reserva: Quarto " + roomNumber + ", check-in: " + simpleDateFormat.format(checkIn) + ", check-out: " + simpleDateFormat.format(checkOut)+", " + duration() + " noites";
     }
 }
