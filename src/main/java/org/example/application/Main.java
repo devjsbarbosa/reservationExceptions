@@ -36,21 +36,22 @@ public class Main {
             System.out.println();
 
             System.out.println("Entre com os dados para atualizare a reserva");
+
             System.out.print("Data de check-in (dd/mm/aaaa): ");
             checkIn = simpleDateFormat.parse(sc.next());
+
             System.out.print("Data de check-out (dd/mm/aaaa): ");
             checkOut = simpleDateFormat.parse(sc.next());
 
-            Date now = new Date();
-            if (checkIn.before(now) || checkOut.before(now)) {
-                System.out.println("Erro na atualização ! As datas de atualização devem ser futuras e não datas passadas");
-            } else if (!checkOut.after(checkIn)) {
-                System.out.println("Erro na reserva ! Data de saída(check-out) não pode ser inferir a data de entrada(check-in");
+            String error = reservation.updateDates(checkIn, checkOut);
 
-            } else {
-                reservation.updateDates(checkIn, checkOut);
+            if (error != null) {
+                System.out.println("Erro na reserva: " + error);
+            }else {
                 System.out.println(reservation);
+
             }
+
 
 
         }

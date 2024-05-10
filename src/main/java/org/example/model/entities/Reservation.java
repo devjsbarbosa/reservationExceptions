@@ -45,13 +45,20 @@ public class Reservation implements Serializable {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
-    public void updateDates(Date checkIn, Date checkOut) {
+    public String updateDates(Date checkIn, Date checkOut) {
+        Date now = new Date();
+
+        if (checkIn.before(now) || checkOut.before(now))    return "Erro na atualização ! As datas de atualização devem ser futuras e não datas passadas";
+        if (!checkOut.after(checkIn))                       return "Erro na reserva ! Data de saída(check-out) não pode ser inferir a data de entrada(check-in)";
+
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+
+        return null;
     }
 
     @Override
     public String toString() {
-        return "Reserva: Quarto " + roomNumber + ", check-in: " + simpleDateFormat.format(checkIn) + ", check-out: " + simpleDateFormat.format(checkOut)+", " + duration() + " noites";
+        return "Reserva: Quarto= " + roomNumber + ", check-in= " + simpleDateFormat.format(checkIn) + ", check-out= " + simpleDateFormat.format(checkOut) + ", " + duration() + " noites";
     }
 }
