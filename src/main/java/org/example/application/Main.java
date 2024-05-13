@@ -1,6 +1,7 @@
 package org.example.application;
 
 import org.example.model.entities.Reservation;
+import org.example.model.exceptions.DomainException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,28 +10,27 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Locale.setDefault(Locale.US);
 
         int roomNumber = 0;
         Date checkIn, checkOut;
-        System.out.println("Inico da reserva");
-        System.out.print("Número do quarto: ");
-        roomNumber = sc.nextInt();
+        try {
+            System.out.println("Inico da reserva");
+            System.out.print("Número do quarto: ");
+            roomNumber = sc.nextInt();
 
 
-        System.out.print("Data de check-in (dd/mm/aaaa): ");
-        checkIn = simpleDateFormat.parse(sc.next());
+            System.out.print("Data de check-in (dd/mm/aaaa): ");
+            checkIn = simpleDateFormat.parse(sc.next());
 
-        System.out.print("Data de check-out (dd/mm/aaaa): ");
-        checkOut = simpleDateFormat.parse(sc.next());
+            System.out.print("Data de check-out (dd/mm/aaaa): ");
+            checkOut = simpleDateFormat.parse(sc.next());
 
-        // se a data de checkout não for posterior a data de checkIn...
-        if (!checkOut.after(checkIn)) {
-            System.out.println("Erro na reserva ! Data de saída(check-out) não pode ser inferir a data de entrada(check-in");
-        } else {
+            // se a data de checkout não for posterior a data de checkIn...
+
             Reservation reservation = new Reservation(roomNumber, checkIn, checkOut);
             System.out.println(reservation);
             System.out.println();
@@ -43,17 +43,17 @@ public class Main {
             System.out.print("Data de check-out (dd/mm/aaaa): ");
             checkOut = simpleDateFormat.parse(sc.next());
 
-            String error = reservation.updateDates(checkIn, checkOut);
-
-            if (error != null) {
-                System.out.println("Erro na reserva: " + error);
-            }else {
-                System.out.println(reservation);
-
-            }
+            reservation.updateDates(checkIn, checkOut);
 
 
+            System.out.println(reservation);
+        } catch (ParseException e) {
+            System.out.println("Erro no envio das datas: " + e);
+        } catch (DomainException e) {
+            System.out.println("Erro ao registrar a reserva: " + e.getMessage());
 
+        } catch (RuntimeException e){
+            System.out.println("Ocorreu um erro inesperado >> "+ e);
         }
 
 

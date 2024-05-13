@@ -1,5 +1,7 @@
 package org.example.model.entities;
 
+import org.example.model.exceptions.DomainException;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +17,12 @@ public class Reservation implements Serializable {
     public Reservation() {
     }
 
-    public Reservation(Integer roomNumber, Date checkin, Date checkout) {
+    public Reservation(Integer roomNumber, Date checkin, Date checkout) throws DomainException {
+        Date now = new Date();
+
+        if (!checkout.after(checkin))                       {
+            throw new DomainException("Erro na reserva ! Data de saída(check-out) não pode ser inferir a data de entrada(check-in)");
+        }
         this.roomNumber = roomNumber;
         this.checkIn = checkin;
         this.checkOut = checkout;
@@ -45,16 +52,18 @@ public class Reservation implements Serializable {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
-    public String updateDates(Date checkIn, Date checkOut) {
+    public void updateDates(Date checkIn, Date checkOut) throws DomainException{
         Date now = new Date();
 
-        if (checkIn.before(now) || checkOut.before(now))    return "Erro na atualização ! As datas de atualização devem ser futuras e não datas passadas";
-        if (!checkOut.after(checkIn))                       return "Erro na reserva ! Data de saída(check-out) não pode ser inferir a data de entrada(check-in)";
-
+        if (checkIn.before(now) || checkOut.before(now))   {
+            throw new DomainException("Erro na atualização ! As datas de atualização devem ser futuras e não datas passadas");
+        }
+        if (!checkOut.after(checkIn))                       {
+            throw new DomainException("Erro na reserva ! Data de saída(check-out) não pode ser inferir a data de entrada(check-in)");
+        }
         this.checkIn = checkIn;
         this.checkOut = checkOut;
 
-        return null;
     }
 
     @Override
